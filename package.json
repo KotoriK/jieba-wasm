@@ -2,8 +2,7 @@
   "name": "jieba-wasm",
   "version": "0.0.2",
   "description": "WASM binding to jieba-rs",
-  "main": "pkg/nodejs/jieba_rs_wasm.js",
-  "browser": "pkg/web/jieba_rs_wasm.js",
+  "main": "pkg/jieba_rs_wasm.js",
   "directories": {
     "test": "tests"
   },
