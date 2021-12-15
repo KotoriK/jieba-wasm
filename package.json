@@ -8,11 +8,8 @@
     "test": "tests"
   },
   "scripts": {
-    "build": "npm run build:nodejs && npm run build:web && npm run build:opt",
-    "build:cargo": "cargo build --release --target wasm32-unknown-unknown",
-    "build:nodejs": "wasm-bindgen target/wasm32-unknown-unknown/release/jieba_rs_wasm.wasm --out-dir ./pkg/nodejs --target nodejs",
-    "build:web": "wasm-bindgen target/wasm32-unknown-unknown/release/jieba_rs_wasm.wasm --out-dir ./pkg/web --target web",
-    "build:opt": "wasm-opt -O3 -o pkg/web/jieba_rs_wasm_bg.wasm pkg/web/jieba_rs_wasm_bg.wasm && wasm-opt -O3 -o pkg/nodejs/jieba_rs_wasm_bg.wasm pkg/nodejs/jieba_rs_wasm_bg.wasm",
+    "build": "wasm-pack build --release",
+    "build:opt": "wasm-opt -O3 -o pkg/jieba_rs_wasm_bg.wasm pkg/jieba_rs_wasm_bg.wasm",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "files": [
