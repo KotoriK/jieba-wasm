@@ -19,7 +19,13 @@ pub struct RetToken<'a> {
     /// Unicode end position of the token
     pub end: usize,
 }
+#[derive(Serialize, Deserialize)]
+pub struct RetTag<'a> {
+    /// Word of the token
+    pub word: &'a str,
+    pub tag: &'a str,
 
+}
 lazy_static! {
     pub static ref JIEBA: Mutex<Jieba> = Mutex::new(Jieba::new());
 }
@@ -75,4 +81,20 @@ pub fn add_word(word: &str, freq: Option<usize>, tag: Option<String>) -> usize {
     let option_str_ref = tag.as_deref();
 
     JIEBA.lock().unwrap().add_word(word, freq, option_str_ref)
+}
+#[wasm_bindgen]
+pub fn tag(sentence:&str,hmm:bool)-> Result<Vec<JsValue>, JsValue>{
+    let jieba = JIEBA.lock().unwrap();
+    let tags = jieba.tag(sentence,hmm);
+    let js_tags = tags
+        .into_iter()
+        .map(|tag| {
+            let t = RetTag {
+                word: tag.word,
+                tag: tag.tag
+            };
+            serde_wasm_bindgen::to_value(&t).unwrap()
+        })
+        .collect();
+        Ok(js_tags)
 }

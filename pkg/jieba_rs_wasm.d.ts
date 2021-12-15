@@ -31,3 +31,9 @@ export function tokenize(text: string, mode: string, hmm: boolean): any[];
 * @returns {number}
 */
 export function add_word(word: string, freq?: number, tag?: string): number;
+/**
+* @param {string} sentence
+* @param {boolean} hmm
+* @returns {any[]}
+*/
+export function tag(sentence: string, hmm: boolean): any[];
