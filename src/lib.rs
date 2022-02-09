@@ -29,59 +29,6 @@ pub struct RetTag<'a> {
 lazy_static! {
     pub static ref JIEBA: Mutex<Jieba> = Mutex::new(Jieba::new());
 }
-
-#[wasm_bindgen]
-pub fn cut(text: &str, hmm: bool) -> Vec<JsValue> {
-    let words = JIEBA.lock().unwrap().cut(text, hmm);
-    words.into_iter().map(JsValue::from).collect()
-}
-
-#[wasm_bindgen]
-pub fn cut_all(text: &str) -> Vec<JsValue> {
-    let words = JIEBA.lock().unwrap().cut_all(text);
-    words.into_iter().map(JsValue::from).collect()
-}
-
-#[wasm_bindgen]
-pub fn cut_for_search(text: &str, hmm: bool) -> Vec<JsValue> {
-    let words = JIEBA.lock().unwrap().cut_for_search(text, hmm);
-    words.into_iter().map(JsValue::from).collect()
-}
-
-#[wasm_bindgen]
-pub fn tokenize(text: &str, mode: &str, hmm: bool) -> Result<Vec<JsValue>, JsValue> {
-    let mode_enum: jieba_rs::TokenizeMode;
-    let mode = mode.to_lowercase();
-    if mode == "search" {
-        mode_enum = jieba_rs::TokenizeMode::Search;
-    } else if mode == "default" {
-        mode_enum = jieba_rs::TokenizeMode::Default;
-    } else {
-        return Err(JsValue::from_str(
-            "Only `default` or `search` mode is valid",
-        ));
-    }
-    let tokens = JIEBA.lock().unwrap().tokenize(text, mode_enum, hmm);
-    let ret_tokens = tokens
-        .into_iter()
-        .map(|tok| {
-            let t = RetToken {
-                word: tok.word,
-                start: tok.start,
-                end: tok.end,
-            };
-            serde_wasm_bindgen::to_value(&t).unwrap()
-        })
-        .collect();
-    Ok(ret_tokens)
-}
-
-#[wasm_bindgen]
-pub fn add_word(word: &str, freq: Option<usize>, tag: Option<String>) -> usize {
-    let option_str_ref = tag.as_deref();
-
-    JIEBA.lock().unwrap().add_word(word, freq, option_str_ref)
-}
 #[wasm_bindgen]
 pub fn tag(sentence:&str,hmm:bool)-> Result<Vec<JsValue>, JsValue>{
     let jieba = JIEBA.lock().unwrap();
